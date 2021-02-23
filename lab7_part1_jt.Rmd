@@ -1,0 +1,70 @@
+---
+title: "ESM 244 Lab 7 Part 1 - stringr functions"
+author: "Jennifer Truong"
+date: "2/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+### Detect string patterns with `str_detect()`
+
+```{r}
+vec <- c(" A fun unicorn     fish ", "add    cornmeal   ", "french    FRIES", "acorn   Squash")
+
+str_detect(vec, pattern = "corn")
+```
+```{r}
+walk_subset <- starwars %>% 
+  filter(str_detect(name, pattern = "walk"))
+
+walk_subset
+
+# Use str_subset()
+```
+### Replace a string pattern with something else
+
+`str_replace()` to replace an existing string pattern with something else
+
+```{r}
+vec_bren <- str_replace(vec, pattern = "corn", replacement = "COOL")
+
+vec_bren
+```
+replace the pattern "Sky" with the pattern "TORNADO"
+```{r}
+sw_tornado <- starwars %>% 
+  mutate(name = str_replace(name, pattern = "Sky", replacement = "TORNADO"))
+```
+
+### Use `str_trim()` to remove excess leading and trailing whitespace
+
+```{r}
+str_trim(vec) 
+
+str_squish(vec)
+```
+```{r}
+str_detect(vec, pattern = "Corn")
+```
+- `str_to_*()`
+
+```{r}
+str_to_lower(vec)
+
+str_to_upper(vec)
+
+str_to_title(vec)
+```
+Using these in combination:
+
+```{r}
+sw_combo <- starwars %>% 
+  filter(str_detect(name, pattern = "Darth")) %>% 
+  mutate(name = str_replace(name, pattern = "Darth", replacement = "LLAMA")) %>% 
+  mutate(name = str_to_lower(name))
+```
+
