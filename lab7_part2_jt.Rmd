@@ -94,6 +94,43 @@ ch1_cloud
 ## Sentiment analysis
 
 ```{r}
+afinn_pos <- get_sentiments("afinn") %>% 
+  filter(value > 2)
+```
 
+### With `afinn`
+
+```{r}
+hobbit_afinn <- hobbit_nonstop_words %>% 
+  inner_join(get_sentiments("afinn"))
+
+afinn_counts <- hobbit_afinn %>% 
+  count(chapter_no, value)
+
+afinn_means <- hobbit_afinn %>% 
+  group_by(chapter_no) %>% 
+  summarize(
+    mean_afinn = mean(value)
+  )
+
+ggplot(data = afinn_means,
+       aes(x = chapter_no, y = mean_afinn)) +
+  geom_col() +
+  coord_flip()
+```
+### Now look using NRC lexicon
+
+```{r}
+hobbit_nrc <- hobbit_nonstop_words %>% 
+  inner_join(get_sentiments("nrc"))
+
+hobbit_nrc_counts <- hobbit_nrc %>% 
+  count(chapter_no, sentiment)
+
+ggplot(data = hobbit_nrc_counts, 
+       aes(x = sentiment, y = n)) +
+  geom_col() +
+  facet_wrap(~chapter_no) +
+  coord_flip()
 ```
 
